@@ -15,4 +15,4 @@ void LoadShader( const std::string& path, GLenum type )
   GLuint shaderObj = glCreateShader( type );
   glShaderSource( shaderObj, 1, shaderSrc.c_str(), NULL );
   glCompileShader( shaderObj );
-
+}
