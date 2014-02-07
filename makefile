@@ -7,3 +7,4 @@ bouncingballs:
 
 clean:
 	rm -f bouncingballs
+	rm -f *.o

@@ -2,7 +2,8 @@
 #include <glew.h>
 #include <string>
 
-void LoadShader( const std::string& path, GLenum type )
+// Compiles a shader from source file at path
+GLuint CompileShaderObject( const std::string& path, GLenum type )
 {
   char line[256];
   std::string shaderSrc;
@@ -19,27 +20,44 @@ void LoadShader( const std::string& path, GLenum type )
   glCompileShader( shaderObj );
 
   // logging
-  glGetShaderiv( shaderObj, GL_COMPILE_STATUS, &result );
-  glGetShaderiv( shaderObj, GL_INFO_LOG_LENGTH, &infologlength );
-  if( infologlength > 0 )
+  unsigned int bufsize = 256;
+  GLsizei length;
+  char *log = new char[bufsize];
+  glGetShaderInfoLog( shaderObj, bufsize, &length, log );
+  if( length > 0 )
   {
     // print some shit, defered to later
+    fprintf( stderr, "%s\n", log );
   }
+  delete [] log;
 
+  return shaderObj;
+}
+
+GLuint LinkShaderProgram( const GLuint* names, unsigned int size )
+{
   // linking
   GLuint program = glCreateProgram();
-  glAttachShader( program, shaderObj );
-  glLinkProgram( program ); // this should probably be a separate function
 
-  // log the linking
-  glGetProgramiv( program, GL_LINK_STATUS, &result );
-  glGetProgramiv( program, GL_INFO_LOG_LENGTH, &infologlength );
-  if( infologlength > 0 )
+  for( unsigned int i = 0; i < size; i++ )
   {
-    // print some shit
+    glAttachShader( program, names[i] );
+    glLinkProgram( program ); // this should probably be a separate function
   }
 
-  glDeleteShader( shaderObj ); // certainly don't need the obj anymore
+  // log the linking
+  unsigned int bufsize = 256;
+  GLsizei length;
+  char *log = new char[bufsize];
+  glGetProgramInfoLog( program, bufsize, &length, log );
+  if( length > 0 )
+  {
+    // print some shit, defered to later
+    fprintf( stderr, "%s\n", log );
+  }
+  delete [] log;
 
+  //glDeleteShader( shaderObj ); //delete on your own time
+  
   return program; // need to actually return the shader
 }
