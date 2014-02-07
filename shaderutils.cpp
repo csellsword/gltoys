@@ -1,17 +1,22 @@
 #include <cstdio>
 #include <glew.h>
 #include <string>
+#include <fstream>
 
 // Compiles a shader from source file at path
 GLuint CompileShaderObject( const std::string& path, GLenum type )
 {
-  char line[256];
   std::string shaderSrc;
-  FILE* src = fopen( path.c_str(), "r" );
-  while( feof( src ) != 0 )
+
+  std::ifstream src( path.c_str(), std::ios::in );
+  if( src.is_open() )
   {
-    fgets( line, 256, src );
-    shaderSrc.append( line );
+    std::string line = "";
+    while( getline( src, line ) )
+    {
+      shaderSrc += "\n" + line;
+    }
+    src.close();
   }
 
   GLuint shaderObj = glCreateShader( type );

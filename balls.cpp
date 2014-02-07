@@ -1,5 +1,12 @@
 #include <SDL.h>
 #include <glew.h> // Replaces OpenGL headers, links with -lGLEW
+#include <string>
+
+GLuint CompileShaderObject( const std::string&, GLenum );
+GLuint LinkShaderProgram( const GLuint*, unsigned int);
+
+enum Attrib_IDs { vPosition = 0 };
+
 
 const GLfloat triangle[][3] = {  { 0.0, 1.0, 0.0 },
                                  { 0.0, 0.0, 0.0 },
@@ -51,6 +58,13 @@ int main( int argc, char** argv )
   // There is no "LoadShader" function provided by the API
   // One must compose shaders in a manner similiar to VAO's
   // and other ogl objects
+  GLuint shaders[2];
+  shaders[0] = CompileShaderObject( std::string( "shader.vert" ), GL_VERTEX_SHADER );
+  shaders[1] = CompileShaderObject( std::string( "shader.frag" ), GL_FRAGMENT_SHADER );
+  GLuint sprog = LinkShaderProgram( shaders, 2 );
+  glUseProgram( sprog );
+  glVertexAttribPointer( vPosition, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+  glEnableVertexAttribArray( vPosition );
 
   glClearColor( 84.0/255.0 , 84.0/255.0 , 84.0/255.0, 1.0 );
   glClear( GL_COLOR_BUFFER_BIT );
@@ -70,6 +84,13 @@ int main( int argc, char** argv )
       }
           
     }
+
+    glClear( GL_COLOR_BUFFER_BIT );
+    glBindVertexArray( VAO );
+    glDrawArrays( GL_TRIANGLES, 0, 3 );
+    glFlush();
+    
+    SDL_GL_SwapWindow( window );
   }
   SDL_DestroyWindow( window );
   SDL_Quit();
