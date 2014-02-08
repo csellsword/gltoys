@@ -5,6 +5,9 @@
 GLuint CompileShaderObject( const std::string&, GLenum );
 GLuint LinkShaderProgram( const GLuint*, unsigned int);
 
+// This corresponds to a value bound in the shader programs and 
+// is used as an entry point for data in the shader program.
+// see: glVertexAttribPointer
 enum Attrib_IDs { vPosition = 0 };
 
 
