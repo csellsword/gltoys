@@ -63,7 +63,7 @@ int main( int argc, char** argv )
   shaders[1] = CompileShaderObject( std::string( "shader.frag" ), GL_FRAGMENT_SHADER );
   GLuint sprog = LinkShaderProgram( shaders, 2 );
   glUseProgram( sprog );
-  glVertexAttribPointer( vPosition, 2, GL_FLOAT, GL_FALSE, 0, 0 );
+  glVertexAttribPointer( vPosition, 3, GL_FLOAT, GL_FALSE, 0, 0 );
   glEnableVertexAttribArray( vPosition );
 
   glClearColor( 84.0/255.0 , 84.0/255.0 , 84.0/255.0, 1.0 );
